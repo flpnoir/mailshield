@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MailShield MVP</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 16px; }
+    input { width: 320px; padding: 8px; }
+    button { padding: 8px 12px; }
+    .box { background: #f4f4f4; padding: 14px; border-radius: 6px; margin-top: 18px; }
+    .err { color: #b00020; margin-top: 12px; }
+    code { font-size: 0.95em; }
+  </style>
+</head>
+<body>
+  <h1>MailShield</h1>
+  <p>Enter a domain to check SPF and DMARC.</p>
+
+  <form method="POST">
+    <input type="text" name="domain" placeholder="e.g. yoobee.ac.nz" required>
+    <button type="submit">Analyse</button>
+  </form>
+
+  {% if error %}
+    <div class="err">{{ error }}</div>
+  {% endif %}
+
+  {% if results %}
+    <div class="box">
+      <h3>Results: {{ results.domain }}</h3>
+
+      <p><strong>SPF:</strong> <code>{{ results.spf }}</code></p>
+      <p><strong>{{ results.spf_policy }}</strong></p>
+
+      <p><strong>DMARC:</strong> <code>{{ results.dmarc }}</code></p>
+      <p><strong>{{ results.dmarc_policy }}</strong></p>
+    </div>
+  {% endif %}
+</body>
+</html>

@@ -25,6 +25,7 @@ def get_spf_record(domain: str) -> str:
 
 def spf_policy_label(spf_record: str) -> str:
     spf = spf_record.lower().strip()
+
     if not spf:
         return "Policy: not found"
     if spf.endswith("-all"):
@@ -50,15 +51,12 @@ def dmarc_policy_label(dmarc_record: str) -> str:
     rec = dmarc_record.lower()
     if not rec:
         return "Policy: not found"
-
-    # DMARC policy is p=...
     if "p=reject" in rec:
         return "Policy: reject"
     if "p=quarantine" in rec:
         return "Policy: quarantine"
     if "p=none" in rec:
         return "Policy: none"
-
     return "Policy: unknown"
 
 
@@ -78,7 +76,4 @@ if __name__ == "__main__":
         print(spf_policy_label(spf))
 
         if dmarc:
-            print(f"DMARC: {dmarc}")
-        else:
-            print("DMARC: not found")
-        print(dmarc_policy_label(dmarc))
+            p

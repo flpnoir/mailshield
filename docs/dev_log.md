@@ -24,8 +24,15 @@ Learnings:
 Work done:
 - Added DMARC lookup by querying TXT records for _dmarc.<domain>.
 - Parsed DMARC policy (p=none, quarantine, reject) and printed a simple label.
+- Tested SPF and DMARC output against real domains.
 
 Learnings:
 - DMARC is published under the _dmarc subdomain, not the root domain.
-- The p= tag communicates how receivers should handle failing emails.
+- The p= tag communicates how receivers should handle emails that fail authentication.
 
+## Sprint 1 – Day 4
+
+Work done:
+- Installed Flask and added it to requirements.txt.
+- Built a minimal web UI to run SPF and DMARC checks from the browser.
+- Kept the DNS logic in dns_lookup.py and used Flask only as a thin UI layer.
