@@ -72,16 +72,24 @@ def extract_dmarc_policy(dmarc_record: str) -> str:
 
 
 def risk_label(spf_record: str, dmarc_record: str) -> str:
-    spf_ok = bool(spf_record)
+    spf_level = spf_policy_label(spf_record).lower()
     dmarc_p = extract_dmarc_policy(dmarc_record)
 
-    if dmarc_p == "reject" and spf_ok:
+    # High if DMARC missing or weak
+    if dmarc_p in ["unknown", "none"]:
+        return "High"
+
+    # High if SPF missing
+    if not spf_record:
+        return "High"
+
+    # Low only when both are strict
+    if ("strict" in spf_level) and (dmarc_p == "reject"):
         return "Low"
-    if dmarc_p in ["reject", "quarantine"] and spf_ok:
-        return "Medium"
-    if dmarc_p in ["reject", "quarantine"] and not spf_ok:
-        return "Medium"
-    return "High"
+
+    # Everything else
+    return "Medium"
+
 
 
 if __name__ == "__main__":

@@ -37,7 +37,18 @@ Work done:
 - Built a minimal page to submit a domain and run the checks in the browser.
 - Reused the DNS engine in dns_lookup.py and returned SPF, DMARC and risk in the UI.
 - Saved screenshots of real domain results for evidence (Low and Medium cases).
+- Adjusted risk scoring to treat missing or weak DMARC as High risk.
 
 Learnings:
 - A Flask route is basically: get input, run the functions, render the result.
 - Keeping the engine separate makes terminal testing quicker and the UI simpler.
+
+## Sprint 1 – Day 5
+
+Work done:
+- Updated the risk scoring rules so DMARC missing or p=none shows High.
+- Set Low risk only when DMARC is reject and SPF ends with -all.
+
+Learnings:
+- A clear rule set makes the output easier to justify in the report, not just “whatever the script prints”.
+- Real domains vary a lot, so the scoring has to handle missing records properly.
