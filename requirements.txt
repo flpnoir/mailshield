@@ -1,2 +1,2 @@
-dnspythondnspython
+dnspython
 flask

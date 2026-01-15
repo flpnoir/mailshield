@@ -1,9 +1,12 @@
 # MailShield
 
-MailShield is a cybersecurity MVP focused on analysing email authentication mechanisms
-such as SPF, DKIM and DMARC using DNS-based checks.
+MailShield is a cybersecurity MVP that analyses email authentication controls using DNS checks.
 
-This repository documents the development process through iterative sprints as part of
-Integrated Studio III (SD205).
+Current features:
+- SPF lookup + policy label (strict, soft, etc)
+- DMARC lookup + policy label (none, quarantine, reject)
+- Minimal Flask UI to analyse a domain and display results
 
-Current status: Sprint 1 – DNS lookup foundation.
+Current status: Sprint 1, DNS lookup engine + basic web interface.
+Next: DKIM lookup (selector-based) and simple risk scoring.
+
