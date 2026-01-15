@@ -36,6 +36,7 @@ Work done:
 - Installed Flask and added it to requirements.txt.
 - Built a minimal page to submit a domain and run the checks in the browser.
 - Reused the DNS engine in dns_lookup.py and returned SPF, DMARC and risk in the UI.
+- Saved screenshots of real domain results for evidence (Low and Medium cases).
 
 Learnings:
 - A Flask route is basically: get input, run the functions, render the result.
