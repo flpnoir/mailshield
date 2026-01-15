@@ -21,6 +21,8 @@ def index():
 
         if not domain:
             error = "Please enter a domain."
+        elif "." not in domain or domain.startswith(".") or domain.endswith("."):
+            error = "Please enter a valid domain (e.g. example.com)."
         else:
             spf = get_spf_record(domain)
             dmarc = get_dmarc_record(domain)
