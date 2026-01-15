@@ -18,3 +18,14 @@ Work done:
 Learnings:
 - The SPF policy strength is often communicated through the all mechanism at the end of the record.
 - A small label like “strict” or “soft” makes the output easier to read and helps later scoring.
+
+## Sprint 1 – Day 3
+
+Work done:
+- Added DMARC lookup by querying TXT records for _dmarc.<domain>.
+- Parsed DMARC policy (p=none, quarantine, reject) and printed a simple label.
+
+Learnings:
+- DMARC is published under the _dmarc subdomain, not the root domain.
+- The p= tag communicates how receivers should handle failing emails.
+
