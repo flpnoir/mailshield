@@ -24,7 +24,7 @@ def get_spf_record(domain: str) -> str:
 
 
 def spf_policy_label(spf_record: str) -> str:
-    spf = spf_record.lower().strip()
+    spf = (spf_record or "").lower().strip()
 
     if not spf:
         return "Policy: not found"
@@ -48,7 +48,7 @@ def get_dmarc_record(domain: str) -> str:
 
 
 def dmarc_policy_label(dmarc_record: str) -> str:
-    rec = dmarc_record.lower()
+    rec = (dmarc_record or "").lower()
     if not rec:
         return "Policy: not found"
     if "p=reject" in rec:
@@ -60,20 +60,44 @@ def dmarc_policy_label(dmarc_record: str) -> str:
     return "Policy: unknown"
 
 
+def extract_dmarc_policy(dmarc_record: str) -> str:
+    rec = (dmarc_record or "").lower()
+    if "p=reject" in rec:
+        return "reject"
+    if "p=quarantine" in rec:
+        return "quarantine"
+    if "p=none" in rec:
+        return "none"
+    return "unknown"
+
+
+def risk_label(spf_record: str, dmarc_record: str) -> str:
+    spf_ok = bool(spf_record)
+    dmarc_p = extract_dmarc_policy(dmarc_record)
+
+    if dmarc_p == "reject" and spf_ok:
+        return "Low"
+    if dmarc_p in ["reject", "quarantine"] and spf_ok:
+        return "Medium"
+    if dmarc_p in ["reject", "quarantine"] and not spf_ok:
+        return "Medium"
+    return "High"
+
+
 if __name__ == "__main__":
     test_domains = ["yoobee.ac.nz", "google.com", "example.com"]
 
     for domain in test_domains:
         spf = get_spf_record(domain)
         dmarc = get_dmarc_record(domain)
+        risk = risk_label(spf, dmarc)
 
         print(f"\nDomain: {domain}")
 
-        if spf:
-            print(f"SPF: {spf}")
-        else:
-            print("SPF: not found")
+        print(f"SPF: {spf}" if spf else "SPF: not found")
         print(spf_policy_label(spf))
 
-        if dmarc:
-            p
+        print(f"DMARC: {dmarc}" if dmarc else "DMARC: not found")
+        print(dmarc_policy_label(dmarc))
+
+        print(f"Risk: {risk}")

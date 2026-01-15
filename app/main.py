@@ -4,7 +4,8 @@ from dns_lookup import (
     get_spf_record,
     spf_policy_label,
     get_dmarc_record,
-    dmarc_policy_label
+    dmarc_policy_label,
+    risk_label,
 )
 
 app = Flask(__name__)
@@ -30,6 +31,7 @@ def index():
                 "spf_policy": spf_policy_label(spf),
                 "dmarc": dmarc if dmarc else "not found",
                 "dmarc_policy": dmarc_policy_label(dmarc),
+                "risk": risk_label(spf, dmarc),
             }
 
     return render_template("index.html", results=results, error=error)

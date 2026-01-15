@@ -34,5 +34,9 @@ Learnings:
 
 Work done:
 - Installed Flask and added it to requirements.txt.
-- Built a minimal web UI to run SPF and DMARC checks from the browser.
-- Kept the DNS logic in dns_lookup.py and used Flask only as a thin UI layer.
+- Built a minimal page to submit a domain and run the checks in the browser.
+- Reused the DNS engine in dns_lookup.py and returned SPF, DMARC and risk in the UI.
+
+Learnings:
+- A Flask route is basically: get input, run the functions, render the result.
+- Keeping the engine separate makes terminal testing quicker and the UI simpler.
