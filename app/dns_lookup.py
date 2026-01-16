@@ -147,6 +147,17 @@ def dkim_status_label(dkim_record: str, selector: str) -> str:
     return "DKIM: not found"
 
 
+def get_bimi_record(domain: str) -> str:
+    """
+    Return the BIMI record (v=BIMI1) under default._bimi.<domain>, otherwise empty string.
+    """
+    bimi_domain = f"default._bimi.{domain}"
+    for txt in get_txt_record(bimi_domain):
+        if txt.lower().startswith("v=bimi1"):
+            return txt
+    return ""
+
+
 def risk_label(spf_record: str, dmarc_record: str, dkim_record: str = "", selector: str = "") -> str:
     """
     Return a simple overall risk label: Low | Medium | High
