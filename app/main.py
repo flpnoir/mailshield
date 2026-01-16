@@ -6,6 +6,8 @@ from dns_lookup import (
     spf_policy_label,
     get_dmarc_record,
     dmarc_policy_label,
+    get_dkim_record,
+    dkim_status_label,
     risk_label,
 )
 
@@ -19,6 +21,7 @@ def index():
 
     if request.method == "POST":
         domain = (request.form.get("domain") or "").strip().lower()
+        selector = (request.form.get("selector") or "").strip().lower()
 
         # Normalise basic URL input
         domain = domain.replace("https://", "").replace("http://", "")
@@ -37,18 +40,26 @@ def index():
                 elif status == "timeout":
                     error = "DNS lookup timed out. Try again."
                 else:
+                    Consider checking your connection or try another domain.
                     error = "DNS lookup failed. Please try another domain."
             else:
                 spf = get_spf_record(domain)
                 dmarc = get_dmarc_record(domain)
 
+                dkim = ""
+                if selector:
+                    dkim = get_dkim_record(domain, selector)
+
                 results = {
                     "domain": domain,
+                    "selector": selector,
                     "spf": spf if spf else "not found",
                     "spf_policy": spf_policy_label(spf),
                     "dmarc": dmarc if dmarc else "not found",
                     "dmarc_policy": dmarc_policy_label(dmarc),
-                    "risk": risk_label(spf, dmarc),
+                    "dkim": dkim if dkim else "not found",
+                    "dkim_status": dkim_status_label(dkim, selector),
+                    "risk": risk_label(spf, dmarc, dkim, selector),
                 }
 
     return render_template("index.html", results=results, error=error)

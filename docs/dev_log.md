@@ -53,3 +53,17 @@ Learnings:
 - A clear rule set makes the output easier to justify in the report, not just “whatever the script prints”.
 - Real domains vary a lot, so the scoring has to handle missing records properly.
 Added DNS status checks (NXDOMAIN/timeout) to keep the UI stable.
+
+## Sprint 2 – Day 6
+
+Work done:
+- Added DKIM lookup using manual selector with <selector>._domainkey.<domain>.
+- Updated Flask UI to accept an optional selector and display DKIM results.
+- Added DKIM status label (selector not provided, found, not found).
+- Updated risk scoring to require DKIM only when a selector is provided.
+- Captured evidence screenshot showing a valid DKIM record (google.com + selector 20230601).
+
+Learnings:
+- DKIM records are selector-based, so “not found” is expected when the selector is wrong.
+- Keeping DKIM optional avoids false negatives when the selector is unknown.
+- Risk scoring needs to be consistent with what the user can realistically provide.

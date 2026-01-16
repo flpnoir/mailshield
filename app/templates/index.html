@@ -25,7 +25,16 @@
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 4px;
+      display: block;
     }
+
+    .hint {
+      color: #666;
+      font-size: 0.9em;
+      margin-top: 6px;
+      margin-bottom: 14px;
+    }
+
     button {
       padding: 10px 18px;
       background-color: #0056b3;
@@ -33,7 +42,7 @@
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      margin-left: 6px;
+      margin-top: 6px;
     }
     button:hover { background-color: #004494; }
 
@@ -89,16 +98,25 @@
 </head>
 <body>
   <h1>MailShield</h1>
-  <p>Domain security check (SPF and DMARC)</p>
+  <p>Domain security check (SPF, DMARC, DKIM)</p>
 
   <form method="POST">
     <input
       type="text"
       name="domain"
-      placeholder="e.g. yoobee.ac.nz"
+      placeholder="Domain (e.g. yoobee.ac.nz)"
       value="{{ results.get('domain', '') if results else '' }}"
       required
     >
+
+    <input
+      type="text"
+      name="selector"
+      placeholder="DKIM selector (optional, e.g. s1, selector1)"
+      value="{{ results.get('selector', '') if results else '' }}"
+    >
+    <div class="hint">Selector is optional. If you do not know it, leave it blank.</div>
+
     <button type="submit">Analyse</button>
   </form>
 
@@ -126,6 +144,20 @@
         <code>{{ results.get('dmarc', 'not found') }}</code>
       </p>
       <span class="policy-label">{{ results.get('dmarc_policy', '') }}</span>
+
+      <hr>
+
+      {% if results.get('selector') %}
+        <p><strong>Selector used:</strong> {{ results.get('selector') }}</p>
+      {% endif %}
+
+      <p><strong>DKIM Record:</strong><br>
+        <code>{{ results.get('dkim', 'not found') }}</code>
+      </p>
+
+      {% if results.get('dkim_status') %}
+        <span class="policy-label">{{ results.get('dkim_status') }}</span>
+      {% endif %}
     </div>
   {% endif %}
 </body>

@@ -83,41 +83,79 @@ def extract_dmarc_policy(dmarc_record: str) -> str:
     return "unknown"
 
 
-def risk_label(spf_record: str, dmarc_record: str) -> str:
+def get_dkim_record(domain: str, selector: str) -> str:
+    selector = (selector or "").strip()
+    if not selector:
+        return ""
+
+    dkim_domain = f"{selector}._domainkey.{domain}"
+    for txt in get_txt_record(dkim_domain):
+        if "v=dkim1" in txt.lower():
+            return txt
+    return ""
+
+
+def dkim_status_label(dkim_record: str, selector: str) -> str:
+    if not (selector or "").strip():
+        return "DKIM: selector not provided"
+    if dkim_record:
+        return "DKIM: found"
+    return "DKIM: not found"
+
+
+def risk_label(spf_record: str, dmarc_record: str, dkim_record: str = "", selector: str = "") -> str:
     spf_level = spf_policy_label(spf_record).lower()
     dmarc_p = extract_dmarc_policy(dmarc_record)
 
-    # High if DMARC missing or weak
     if dmarc_p in ["unknown", "none"]:
         return "High"
 
-    # High if SPF missing
     if not spf_record:
         return "High"
 
-    # Low only when both are strict
-    if ("strict" in spf_level) and (dmarc_p == "reject"):
+    low_candidate = ("strict" in spf_level) and (dmarc_p == "reject")
+
+    # If selector was provided, require DKIM to confirm Low
+    if selector:
+        if low_candidate and dkim_record:
+            return "Low"
+        return "Medium"
+
+    # If no selector, do not penalise for DKIM
+    if low_candidate:
         return "Low"
 
-    # Everything else
     return "Medium"
 
 
-
 if __name__ == "__main__":
-    test_domains = ["yoobee.ac.nz", "google.com", "example.com"]
+    test_cases = [
+        ("yoobee.ac.nz", ""),          # no selector
+        ("google.com", "selector1"),   # likely not found
+        ("yahoo.com", "selector1"),    # likely not found
+        ("example.com", ""),           # strict SPF + reject DMARC (often Low by your rules)
+    ]
 
-    for domain in test_domains:
+    for domain, selector in test_cases:
         spf = get_spf_record(domain)
         dmarc = get_dmarc_record(domain)
-        risk = risk_label(spf, dmarc)
+
+        dkim = get_dkim_record(domain, selector) if selector else ""
+        dkim_status = dkim_status_label(dkim, selector)
+
+        risk = risk_label(spf, dmarc, dkim, selector)
 
         print(f"\nDomain: {domain}")
+        if selector:
+            print(f"Selector: {selector}")
 
         print(f"SPF: {spf}" if spf else "SPF: not found")
         print(spf_policy_label(spf))
 
         print(f"DMARC: {dmarc}" if dmarc else "DMARC: not found")
         print(dmarc_policy_label(dmarc))
+
+        print(f"DKIM: {dkim}" if dkim else "DKIM: not found")
+        print(dkim_status)
 
         print(f"Risk: {risk}")
