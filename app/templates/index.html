@@ -133,15 +133,25 @@
         <span class="risk-badge risk-{{ risk_value }}">{{ risk_value }}</span>
       </p>
 
+      <form method="POST" action="/download_report" style="margin-top: 10px;">
+        <input type="hidden" name="domain" value="{{ results.get('domain', '') }}">
+        <input type="hidden" name="selector" value="{{ results.get('selector', '') }}">
+        <input type="hidden" name="spf" value="{{ results.get('spf', 'Not found') }}">
+        <input type="hidden" name="dmarc" value="{{ results.get('dmarc', 'Not found') }}">
+        <input type="hidden" name="dkim" value="{{ results.get('dkim', 'Not found') }}">
+        <input type="hidden" name="risk" value="{{ results.get('risk', 'Unknown') }}">
+        <button type="submit">Download TXT Report</button>
+      </form>
+
       <hr>
 
       <p><strong>SPF Record:</strong><br>
-        <code>{{ results.get('spf', 'not found') }}</code>
+        <code>{{ results.get('spf', 'Not found') }}</code>
       </p>
       <span class="policy-label">{{ results.get('spf_policy', '') }}</span>
 
       <p><strong>DMARC Record:</strong><br>
-        <code>{{ results.get('dmarc', 'not found') }}</code>
+        <code>{{ results.get('dmarc', 'Not found') }}</code>
       </p>
       <span class="policy-label">{{ results.get('dmarc_policy', '') }}</span>
 
@@ -152,7 +162,7 @@
       {% endif %}
 
       <p><strong>DKIM Record:</strong><br>
-        <code>{{ results.get('dkim', 'not found') }}</code>
+        <code>{{ results.get('dkim', 'Not found') }}</code>
       </p>
 
       {% if results.get('dkim_status') %}
