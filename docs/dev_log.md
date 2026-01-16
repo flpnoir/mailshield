@@ -52,7 +52,7 @@ Work done:
 Learnings:
 - A clear rule set makes the output easier to justify in the report, not just “whatever the script prints”.
 - Real domains vary a lot, so the scoring has to handle missing records properly.
-Added DNS status checks (NXDOMAIN/timeout) to keep the UI stable.
+- Added DNS status checks (NXDOMAIN/timeout) to keep the UI stable.
 
 ## Sprint 2 – Day 6
 
@@ -67,3 +67,18 @@ Learnings:
 - DKIM records are selector-based, so “not found” is expected when the selector is wrong.
 - Keeping DKIM optional avoids false negatives when the selector is unknown.
 - Risk scoring needs to be consistent with what the user can realistically provide.
+
+## Sprint 2 – Day 7
+
+Work done:
+- Added a Flask route /download_report to generate a downloadable TXT Technical Report.
+- Passed results from the UI to the backend using hidden form fields in index.html.
+- Improved the report format with tool version and UTC timestamp.
+- Added clear section separators (SPF, DMARC, DKIM) plus a short risk explanation note.
+- Tested the report export using google.com with selector 20230601 and confirmed the TXT downloads correctly.
+- Created and organised an evidence/ folder with screenshots for valid results and controlled errors (NXDOMAIN).
+
+Learnings:
+- A report export feature turns a simple checker into a client friendly deliverable.
+- Keeping UI values consistent (Not found, selector optional) avoids confusing outputs in the report.
+- Clean formatting and evidence screenshots improve traceability and make results easier to validate.
