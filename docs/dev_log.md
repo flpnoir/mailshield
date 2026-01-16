@@ -52,3 +52,4 @@ Work done:
 Learnings:
 - A clear rule set makes the output easier to justify in the report, not just “whatever the script prints”.
 - Real domains vary a lot, so the scoring has to handle missing records properly.
+Added DNS status checks (NXDOMAIN/timeout) to keep the UI stable.

@@ -16,6 +16,18 @@ def get_txt_record(domain: str) -> list[str]:
         return []
 
 
+def dns_status(domain: str) -> str:
+    try:
+        dns.resolver.resolve(domain, "NS")
+        return "ok"
+    except dns.resolver.NXDOMAIN:
+        return "nxdomain"
+    except dns.resolver.Timeout:
+        return "timeout"
+    except Exception:
+        return "error"
+
+
 def get_spf_record(domain: str) -> str:
     for txt in get_txt_record(domain):
         if txt.lower().startswith("v=spf1"):
