@@ -40,8 +40,7 @@ def index():
                 elif status == "timeout":
                     error = "DNS lookup timed out. Try again."
                 else:
-                    Consider checking your connection or try another domain.
-                    error = "DNS lookup failed. Please try another domain."
+                    error = "DNS lookup failed. Consider checking your connection or try another domain."
             else:
                 spf = get_spf_record(domain)
                 dmarc = get_dmarc_record(domain)
