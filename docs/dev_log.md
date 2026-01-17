@@ -97,6 +97,7 @@ Work done:
 - Displayed BIMI results in index.html and included BIMI in the downloadable TXT report.
 - Refined the UI with clearer risk badges and cleaner result layout.
 - Ran final validations against real domains to confirm SPF, DMARC, DKIM and BIMI behaviour.
+- Ensured BIMI lookups only run after dns_status(domain) returned ok.
 
 Learnings:
 - BIMI depends on strong DMARC, which reinforced why the risk engine prioritises p=reject.

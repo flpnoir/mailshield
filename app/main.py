@@ -85,7 +85,7 @@ def download_report():
     tool_version = "MailShield MVP v1.0"
 
     risk_note = (
-        "Risk is an overall posture indicator based on SPF, DKIM and DMARC.\n"
+        "Risk is an overall posture indicator based on SPF, DKIM, DMARC (BIMI shown when available).\n"
         "It is not a guarantee of legitimacy, but helps identify less secure domain configurations."
     )
 
@@ -111,13 +111,13 @@ def download_report():
         "------------------------------------------------------------\n"
         f"{dmarc}\n"
         "------------------------------------------------------------\n"
-        "BIMI\n"
-        "------------------------------------------------------------\n"
-        f"{bimi}\n"
-        "------------------------------------------------------------\n"
         "DKIM\n"
         "------------------------------------------------------------\n"
         f"{dkim}\n"
+        "------------------------------------------------------------\n"
+        "BIMI\n"
+        "------------------------------------------------------------\n"
+        f"{bimi}\n"
         "============================================================\n"
         "End of report\n"
     )
