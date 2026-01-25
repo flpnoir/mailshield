@@ -12,12 +12,14 @@
       padding: 0 16px;
       color: #333;
     }
+
     h1 {
       color: #1a1a1a;
       border-bottom: 2px solid #eee;
       padding-bottom: 10px;
       margin-bottom: 12px;
     }
+
     p { margin-top: 0; }
 
     input {
@@ -26,12 +28,13 @@
       border: 1px solid #ccc;
       border-radius: 4px;
       display: block;
+      margin-bottom: 10px;
     }
 
     .hint {
       color: #666;
       font-size: 0.9em;
-      margin-top: 6px;
+      margin-top: 0;
       margin-bottom: 14px;
     }
 
@@ -44,15 +47,18 @@
       cursor: pointer;
       margin-top: 6px;
     }
+
     button:hover { background-color: #004494; }
 
     .box {
-      background: #f9f9f9;
+      background: #ffffff;
       padding: 20px;
       border: 1px solid #ddd;
-      border-radius: 8px;
+      border-radius: 12px;
       margin-top: 24px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     }
+
     .err {
       color: #b00020;
       background: #fdeaea;
@@ -60,13 +66,15 @@
       border-radius: 4px;
       margin-top: 12px;
     }
-    code {
-      background: #eee;
-      padding: 2px 5px;
-      border-radius: 3px;
-      font-family: "Courier New", monospace;
+
+    code.dns-record {
+      display: block;
+      background: #f8f9fa;
+      padding: 12px;
+      border-radius: 6px;
+      border-left: 4px solid #dee2e6;
       word-break: break-all;
-      display: inline-block;
+      font-family: "Courier New", monospace;
       margin-top: 6px;
     }
 
@@ -88,17 +96,23 @@
       font-size: 0.85em;
       vertical-align: middle;
     }
+
     .risk-Low { background-color: #2e7d32; }
     .risk-Medium { background-color: #f9a825; }
     .risk-High { background-color: #c62828; }
     .risk-Unknown { background-color: #616161; }
 
-    hr { border: none; border-top: 1px solid #e5e5e5; margin: 14px 0; }
+    hr {
+      border: none;
+      border-top: 1px solid #e5e5e5;
+      margin: 14px 0;
+    }
   </style>
 </head>
+
 <body>
   <h1>MailShield</h1>
-  <p>Domain security check (SPF, DMARC, DKIM)</p>
+  <p>Domain security check (SPF, DMARC, DKIM, BIMI)</p>
 
   <form method="POST">
     <input
@@ -112,9 +126,10 @@
     <input
       type="text"
       name="selector"
-      placeholder="DKIM selector (optional, e.g. s1, selector1)"
+      placeholder="DKIM selector (optional, e.g. 20230601)"
       value="{{ results.get('selector', '') if results else '' }}"
     >
+
     <div class="hint">Selector is optional. If you do not know it, leave it blank.</div>
 
     <button type="submit">Analyse</button>
@@ -139,20 +154,19 @@
         <input type="hidden" name="spf" value="{{ results.get('spf', 'Not found') }}">
         <input type="hidden" name="dmarc" value="{{ results.get('dmarc', 'Not found') }}">
         <input type="hidden" name="dkim" value="{{ results.get('dkim', 'Not found') }}">
+        <input type="hidden" name="bimi" value="{{ results.get('bimi', 'Not found') }}">
         <input type="hidden" name="risk" value="{{ results.get('risk', 'Unknown') }}">
         <button type="submit">Download TXT Report</button>
       </form>
 
       <hr>
 
-      <p><strong>SPF Record:</strong><br>
-        <code>{{ results.get('spf', 'Not found') }}</code>
-      </p>
+      <p><strong>SPF Record:</strong></p>
+      <code class="dns-record">{{ results.get('spf', 'Not found') }}</code>
       <span class="policy-label">{{ results.get('spf_policy', '') }}</span>
 
-      <p><strong>DMARC Record:</strong><br>
-        <code>{{ results.get('dmarc', 'Not found') }}</code>
-      </p>
+      <p><strong>DMARC Record:</strong></p>
+      <code class="dns-record">{{ results.get('dmarc', 'Not found') }}</code>
       <span class="policy-label">{{ results.get('dmarc_policy', '') }}</span>
 
       <hr>
@@ -161,13 +175,15 @@
         <p><strong>Selector used:</strong> {{ results.get('selector') }}</p>
       {% endif %}
 
-      <p><strong>DKIM Record:</strong><br>
-        <code>{{ results.get('dkim', 'Not found') }}</code>
-      </p>
+      <p><strong>DKIM Record:</strong></p>
+      <code class="dns-record">{{ results.get('dkim', 'Not found') }}</code>
 
       {% if results.get('dkim_status') %}
         <span class="policy-label">{{ results.get('dkim_status') }}</span>
       {% endif %}
+
+      <p><strong>BIMI Record:</strong></p>
+      <code class="dns-record">{{ results.get('bimi', 'Not found') }}</code>
     </div>
   {% endif %}
 </body>

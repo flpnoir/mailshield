@@ -10,6 +10,7 @@ from dns_lookup import (
     dmarc_policy_label,
     get_dkim_record,
     dkim_status_label,
+    get_bimi_record,
     risk_label,
 )
 
@@ -46,6 +47,7 @@ def index():
             else:
                 spf = get_spf_record(domain)
                 dmarc = get_dmarc_record(domain)
+                bimi = get_bimi_record(domain)
 
                 dkim = ""
                 if selector:
@@ -60,6 +62,7 @@ def index():
                     "dmarc_policy": dmarc_policy_label(dmarc),
                     "dkim": dkim if dkim else "Not found",
                     "dkim_status": dkim_status_label(dkim, selector),
+                    "bimi": bimi if bimi else "Not found",
                     "risk": risk_label(spf, dmarc, dkim, selector),
                 }
 
@@ -73,6 +76,7 @@ def download_report():
     spf = (request.form.get("spf") or "Not found").strip()
     dmarc = (request.form.get("dmarc") or "Not found").strip()
     dkim = (request.form.get("dkim") or "Not found").strip()
+    bimi = (request.form.get("bimi") or "Not found").strip()
     risk = (request.form.get("risk") or "Unknown").strip()
 
     safe_domain = re.sub(r"[^a-zA-Z0-9.-]+", "_", domain)[:80] or "domain"
@@ -81,7 +85,7 @@ def download_report():
     tool_version = "MailShield MVP v1.0"
 
     risk_note = (
-        "Risk is an overall posture indicator based on SPF, DKIM and DMARC.\n"
+        "Risk is an overall posture indicator based on SPF, DKIM, DMARC (BIMI shown when available).\n"
         "It is not a guarantee of legitimacy, but helps identify less secure domain configurations."
     )
 
@@ -110,6 +114,10 @@ def download_report():
         "DKIM\n"
         "------------------------------------------------------------\n"
         f"{dkim}\n"
+        "------------------------------------------------------------\n"
+        "BIMI\n"
+        "------------------------------------------------------------\n"
+        f"{bimi}\n"
         "============================================================\n"
         "End of report\n"
     )

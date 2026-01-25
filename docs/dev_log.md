@@ -82,3 +82,18 @@ Learnings:
 - A report export feature turns a simple checker into a client friendly deliverable.
 - Keeping UI values consistent (Not found, selector optional) avoids confusing outputs in the report.
 - Clean formatting and evidence screenshots improve traceability and make results easier to validate.
+
+## Sprint 3 – Day 8 (Final)
+
+Work done:
+- Integrated BIMI lookup logic into dns_lookup.py using default._bimi.<domain>.
+- Exposed BIMI in main.py and passed it to the Flask template.
+- Displayed BIMI results in index.html and included BIMI in the downloadable TXT report.
+- Refined the UI with clearer risk badges and cleaner result layout.
+- Ran final validations against real domains to confirm SPF, DMARC, DKIM and BIMI behaviour.
+- Ensured BIMI lookups only run after dns_status(domain) returned ok.
+
+Learnings:
+- BIMI depends on strong DMARC, which reinforced why the risk engine prioritises p=reject.
+- Passing values consistently from backend to template is critical when adding new features.
+- Clear visual cues in the UI make security outcomes easier to interpret for non technical users.

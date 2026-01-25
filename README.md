@@ -1,6 +1,6 @@
 # MailShield MVP
 
-MailShield is a lightweight web tool that analyses a domain’s email security posture in real time by checking SPF, DKIM and DMARC DNS records.
+MailShield is a lightweight web tool that analyses a domain’s email security posture in real time by checking SPF, DKIM, DMARC and BIMI records via DNS.
 
 ## Purpose
 
@@ -8,7 +8,7 @@ Many New Zealand SMEs rely on email but often lack visibility over their domain 
 
 ## Features
 
-- Real time DNS lookups for SPF, DKIM and DMARC  
+- Real time DNS lookups for SPF, DKIM, DMARC and BIMI  
 - Basic risk scoring based on email authentication posture  
 - Clear labels explaining each policy outcome  
 - Downloadable TXT Technical Report  
@@ -35,7 +35,7 @@ Open:
 - Enter a domain, for example `google.com`
 - Optionally enter a DKIM selector
 - Click Analyse
-- Review SPF, DMARC and DKIM results with the risk label
+- Review SPF, DMARC, DKIM and BIMI results with the risk label
 - Click Download TXT Report to export the findings
 
 ## Evidence
@@ -44,6 +44,7 @@ Screenshots are available in the evidence/ folder, including:
 
 - Valid domain without DKIM selector
 - Valid domain with DKIM selector
+- BIMI example (domain with BIMI record)
 - NXDOMAIN error case
 
 ## Notes
